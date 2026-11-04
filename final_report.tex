@@ -1,0 +1,290 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage[margin=0.62in,top=0.54in,bottom=0.54in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{makecell}
+\usepackage[table]{xcolor}
+\usepackage[skins,breakable]{tcolorbox}
+\usepackage[font=footnotesize,labelfont={bf,color=accent},labelsep=period]{caption}
+\usepackage{hyperref}
+\expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks\do\/\do\-\do\_}
+
+\definecolor{accent}{RGB}{25, 65, 110}
+\definecolor{amber}{RGB}{230, 150, 20}
+\definecolor{hl}{RGB}{255, 243, 205}
+\definecolor{linkblue}{RGB}{0, 0, 238}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accent,
+    urlcolor=linkblue,
+    citecolor=accent,
+    pdftitle={CS-215 Checkpoint 2 Report - Group 33},
+    pdfauthor={Group 33: Rutvik, Goutham, Yaswanth, Chakri}
+}
+
+% ---------- highlighting helper (bold + accent colour; works for text and $math$) ----------
+\newcommand{\res}[1]{{\bfseries\boldmath\color{accent}#1}}
+% ---------- table header cell ----------
+\newcommand{\hd}[1]{\textcolor{white}{\textbf{#1}}}
+
+\setlength{\parskip}{0.22em}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.04}
+\emergencystretch=2em
+
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\setlength{\floatsep}{3pt plus 1pt minus 1pt}
+\setlength{\textfloatsep}{4pt plus 1pt minus 1pt}
+\setlength{\intextsep}{3pt plus 1pt minus 1pt}
+\setlength{\abovecaptionskip}{2pt}
+\setlength{\belowcaptionskip}{1pt}
+
+\makeatletter
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                                   {-1.1ex \@plus -0.25ex \@minus -.15ex}%
+                                   {0.4ex \@plus.1ex}%
+                                   {\normalfont\large\bfseries\color{accent}}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                                     {-0.8ex\@plus -0.2ex \@minus -.1ex}%
+                                     {0.3ex \@plus .1ex}%
+                                     {\normalfont\normalsize\bfseries\color{accent}}}
+\makeatother
+
+\newcommand{\blankslot}[1]{\rule{0pt}{#1}}
+
+\begin{document}
+
+% ============================================================================
+% PAGE 1: SECTION 1 - META INFORMATION
+% ============================================================================
+\begin{center}
+    {\Large \textbf{\textcolor{accent}{Investigating the Relationship Between Students' Lifestyle Choices and Academic Performance}}}\\[0.2em]
+    {\normalsize \textbf{Checkpoint 2: Final Project Deliverables Report}}
+\end{center}
+\vspace{0.1em}
+
+\section{Meta Information}
+
+\renewcommand{\arraystretch}{1.45}
+\setlength{\tabcolsep}{8pt}
+\arrayrulecolor{accent!35}
+\begin{tabularx}{\textwidth}{>{\columncolor{accent!10}\bfseries\raggedright\arraybackslash}p{0.31\textwidth} >{\raggedright\arraybackslash}X}
+\arrayrulecolor{accent}\toprule[1.2pt]\arrayrulecolor{accent!35}
+1. Open Project Title & Investigating the Relationship Between Students' Lifestyle Choices and Academic Performance \\
+\midrule
+2. Group ID & \texttt{"33"} \\
+\midrule
+3. Mentor Name & Avadh Hindocha (24B1005) \\
+\midrule
+4. Group Member Names and Roll Numbers & 
+\begin{tabular}[t]{@{}p{0.38\linewidth}p{0.45\linewidth}@{}}
+\textbf{\textcolor{accent}{Member Name}} & \textbf{\textcolor{accent}{Roll Number}} \\
+Yaswanth & 25B0993 \\
+Rutvik   & 25B1016 \\
+Goutham  & 25B1019 \\
+Chakri   & 25B1070 \\
+\end{tabular} \\
+\midrule
+5. Honor Code and Discussions & We hereby affirm that we have adhered to the course Honor Code. We did not consult or discuss our work with anyone outside our group (\texttt{"33"}). All data exploration, statistical modeling, and report drafting were conducted solely by the group members listed above. \\
+\midrule
+6. LLM Usage Links & \blankslot{2.2em} \\
+\midrule
+7. Link to Video Presentation & \blankslot{1.8em} \\
+\midrule
+8. GitHub Repository Link & \href{https://github.com/svschakri/CS-215-DAI_project}{\nolinkurl{https://github.com/svschakri/CS-215-DAI_project}} \\
+\midrule
+9. GitHub Handles and Initial Commit & \blankslot{3.0em} \\
+\midrule
+10. Contribution Breakdown & \blankslot{1.8em} \\
+\arrayrulecolor{accent}\bottomrule[1.2pt]
+\end{tabularx}
+\arrayrulecolor{black}
+\renewcommand{\arraystretch}{1.04}
+\setlength{\tabcolsep}{6pt}
+
+% ============================================================================
+% PAGES 2-3: SECTION 2 - TECHNICAL CONTENT (STARTS ON A NEW PAGE)
+% ============================================================================
+\newpage
+\section{Technical Content}
+
+\subsection{Core Problem Statement}
+University students operate under a fixed 24-hour daily time budget, forcing continuous trade-offs among academic study, sleep, physical exercise, extracurricular participation, and social interaction. The primary analytical question addressed in this project is: \textbf{How do daily lifestyle choices and self-reported stress levels relate to a student's cumulative grade point average (CGPA), and which daily habits actually make a difference in predicting academic performance when every student is limited to the same 24 hours a day?}
+
+In everyday college life, every extra hour spent studying has to come from somewhere else---usually sleep, exercise, club activities, or time with friends. Students often assume that studying longer is the only way to improve their grades, even if it means sleeping less and dealing with constant stress. At the same time, it is not immediately obvious whether non-academic habits like physical activity, social time, or extracurriculars actually hurt grades, or if they simply get squeezed out when study hours increase. Our problem focuses on untangling these daily time trade-offs to see which routines genuinely drive CGPA and student stress, and which apparent patterns are just side effects of a fixed 24-hour day.
+
+\subsection{Data Source(s)}
+The analysis uses the \textbf{Student Lifestyle Dataset} (\texttt{student\_lifestyle\_dataset.csv}), available in our project repository and sourced from Kaggle (\href{https://www.kaggle.com/datasets/steve1215rogg/student-lifestyle-dataset}{\nolinkurl{https://www.kaggle.com/datasets/steve1215rogg/student-lifestyle-dataset}}).
+\begin{itemize}\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}\setlength{\topsep}{1pt}
+    \item \textbf{Scale and Completeness:} The dataset contains $N = 2,000$ student records across $8$ columns, with $0$ missing values (\texttt{NaN}) and $0$ duplicate rows.
+    \item \textbf{Schema and Structure:} Beyond \texttt{Student\_ID} ($1\text{--}2000$), the dataset records five continuous daily time-allocation columns (in hours/day)---Study, Extracurricular, Sleep, Social, and Physical Activity hours---alongside \texttt{CGPA} (on a $4.00$ scale) and \texttt{Stress\_Level} (encoded as $0 = \text{Low}$, $1 = \text{Medium}$, $2 = \text{High}$).
+    \item \textbf{24-Hour Daily Total:} Across all $2,000$ rows, the five daily activity columns always add up to exactly $24.0\text{ hours}$ for every student: $\text{Study} + \text{Extracurricular} + \text{Sleep} + \text{Social} + \text{Physical} = 24.0\text{ hours}$.
+\end{itemize}
+
+
+
+\subsection{Tools and Software Packages}
+All data exploration, statistical simulations, and regression modeling were implemented in \textbf{Python 3} inside our Jupyter Notebook (\texttt{analysis.ipynb}) using:
+\begin{itemize}\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}\setlength{\topsep}{1pt}
+    \item \textbf{\texttt{pandas}:} Loading CSV data (\texttt{read\_csv}), checking missing values and duplicates, summary statistics (\texttt{describe()}), group-by averages across stress levels (\texttt{groupby}), and building correlation tables (\texttt{corr()}).
+    \item \textbf{\texttt{NumPy}:} Matrix operations (\texttt{column\_stack}, \texttt{ones}, \texttt{@}, \texttt{linalg.inv}) to solve multiple linear regression directly via the normal equation $\hat{\beta} = (X^\top X)^{-1} X^\top y$, calculate $\text{SST}$, $\text{SSE}$, and $R^2$, mask correlation matrices (\texttt{triu}, \texttt{tril}), and draw random samples (\texttt{default\_rng(0)}).
+    \item \textbf{\texttt{SciPy} (\texttt{scipy.stats}):} Plotting theoretical normal density curves (\texttt{stats.norm.pdf}) and measuring skewness (\texttt{stats.skew}) in our Central Limit Theorem simulation.
+    \item \textbf{\texttt{Matplotlib} \& \texttt{Seaborn}:} Creating the stress-level pie chart, $3\times 2$ histogram grids with KDE curves (\texttt{histplot}), grouped boxplots (\texttt{boxplot}), and the lower-triangle correlation heatmap (\texttt{heatmap}).
+\end{itemize}
+
+\subsection{Challenges and Results Achieved}
+
+\textbf{Technical Hurdles \& Data Challenges:}
+\begin{enumerate}\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}\setlength{\topsep}{1pt}
+    \item \emph{The 24-Hour Total Breaking Matrix Inversion in \texttt{NumPy}:} When we first tried running linear regression with all five time columns plus a column of ones for the intercept, \texttt{np.linalg.inv(X.T @ X)} could not invert the matrix. We realized that because all five activities add up to exactly $24\text{ hours}$ ($\text{Sleep} = 24 - \text{Study} - \text{Extracurricular} - \text{Social} - \text{Physical}$), the fifth column contains no new information. Dropping \texttt{Sleep\_Hours\_Per\_Day} fixed the matrix inversion immediately.
+    \item \emph{Making Sense of the Negative Correlation with Physical Activity:} Seeing Physical Activity correlate negatively with CGPA ($r = -0.34$) initially looked strange, as if exercising lowers grades. Checking the full correlation matrix showed that Study and Physical Activity are negatively correlated ($r = -0.49$) simply because students who study $8\text{--}10\text{ h/day}$ have fewer hours left in a 24-hour day for sports.
+\end{enumerate}
+\newpage
+
+\textbf{\textcolor{accent}{Key Analytical Results:}}
+\begin{enumerate}\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}\setlength{\topsep}{1pt}
+    \item \textbf{Stress Groups \& Correlations (Table~\ref{tab:stress_corr}):} High stress ($1,029$ students, $51.5\%$) is the largest group, followed by Medium ($674$, $33.7\%$) and Low ($297$, $14.8\%$). Study hours has the strongest positive correlation with both CGPA ($r = 0.73$) and Stress ($r = 0.74$), while CGPA and Stress correlate moderately ($r = 0.55$). Sleep has a negative correlation with Stress ($r = -0.30$) and nearly zero correlation with CGPA ($r = -0.004$).
+    \item \textbf{\texttt{NumPy} Multiple Linear Regression (Table~\ref{tab:ols}):} Regressing CGPA on the $4$ routine variables (with Sleep omitted as the baseline) via $\hat{\beta} = (X^\top X)^{-1} X^\top y$ gives $\widehat{\text{CGPA}} = 1.8981 + 0.1589\,\text{Study} - 0.0029\,\text{Extracurricular} + 0.0059\,\text{Social} + 0.0045\,\text{Physical}$. From $\text{SST} = 178.323$ and $\text{SSE} = 81.856$, the model explains $R^2 = 1 - \text{SSE}/\text{SST} = 0.541$ ($54.1\%$) of CGPA variance.
+    \item \textbf{Central Limit Theorem (CLT) Simulation (Table~\ref{tab:clt}):} Even though \texttt{Study\_Hours\_Per\_Day} ($\mu = 7.4758$, $\sigma = 1.4235$) is flat and bounded between $5$ and $10\text{ hours}$, drawing $5,000$ random samples for each $n \in \{1, 2, 5, 10, 30, 100\}$ showed the sample means quickly forming a normal bell curve $\mathcal{N}(\mu, \sigma^2/n)$, with the empirical SD dropping from $1.4223$ ($n=1$) to $0.1437$ ($n=100$), matching $\sigma/\sqrt{n} = 0.1424$.
+\end{enumerate}
+
+% ---------------- HIGHLIGHTED CONCLUSIONS BOX ----------------
+\begin{tcolorbox}[enhanced,breakable,colback=accent!5,colframe=accent,coltitle=white,
+    fonttitle=\bfseries\normalsize,title={Main Conclusions},
+    boxrule=0.9pt,arc=2pt,left=6pt,right=6pt,top=3pt,bottom=3pt,boxsep=1pt,
+    before skip=3pt,after skip=5pt,
+    borderline west={3.5pt}{0pt}{amber}]
+\begin{itemize}\setlength{\itemsep}{1.5pt}\setlength{\parskip}{0pt}\setlength{\topsep}{1pt}
+    \item \textbf{\textcolor{accent}{Study hours is the only daily habit that meaningfully predicts CGPA:}} Each extra study hour adds \res{$+0.1589$} CGPA points ($p < 0.001$), and study time alone explains almost the exact same variation (\res{$r^2 = 0.734^2 \approx 53.9\%$}) as all four routine variables combined (\res{$R^2 = 54.1\%$}). Extracurricular, Social, and Physical Activity hours have practically zero direct effect on grades ($|\hat{\beta}| \le 0.006$).
+    \item \textbf{\textcolor{accent}{Physical activity and non-academic habits do not hurt grades:}} Although Physical Activity shows a negative raw correlation with CGPA ($r = -0.34$), that negative relationship completely disappears in the regression model (\res{$\hat{\beta}_{\text{phys}} = +0.0045$}) once Study hours is accounted for. The raw correlation is just a mechanical consequence of the 24-hour day, where heavier study schedules crowd out exercise ($r = -0.49$).
+    \item \textbf{\textcolor{accent}{Higher CGPA comes with higher stress unless routines are balanced:}} Because Study hours strongly drives both CGPA ($r = 0.73$) and Stress ($r = 0.74$) while Sleep reduces Stress ($r = -0.30$), students in the High-stress tier achieve a \res{$3.26$} CGPA by studying \res{$8.39\text{ h/day}$} and cutting sleep to \res{$7.05\text{ h/day}$}. In contrast, the \textbf{Medium-stress routine} ($\approx 7.0\text{ h/day}$ study, $\approx 8.0\text{ h/day}$ sleep) sustains a healthy \res{$3.02$} CGPA without severe stress.
+    \item \textbf{\textcolor{accent}{Nearly half ($45.9\%$) of CGPA variation lies beyond daily hour counts:}} Because $R^2 = 0.541$ leaves \res{$45.9\%$} of total variation ($\text{SSE} = 81.856$ out of $\text{SST} = 178.323$) unexplained, two students studying the same number of hours can still earn very different grades due to unmeasured factors such as study quality, prior preparation, class attendance, and course difficulty.
+\end{itemize}
+\end{tcolorbox}
+
+% ---------------- TABLE 1 ----------------
+\begin{table}[!htbp]
+\centering
+\caption{Stress-Tier Group Averages and Top Pairwise Pearson Correlations ($N = 2,000$)}
+\label{tab:stress_corr}
+\footnotesize
+\renewcommand{\arraystretch}{1.08}
+\setlength{\tabcolsep}{5pt}
+\arrayrulecolor{accent!40}
+\begin{tabularx}{\textwidth}{>{\bfseries}l c c c c c !{\color{accent}\vrule width 0.8pt} >{\raggedright\arraybackslash}X c}
+\arrayrulecolor{accent}\toprule[1.2pt]
+\rowcolor{accent}
+\hd{Stress Tier} & \hd{Count ($\%$)} & \hd{CGPA} & \hd{Study (h)} & \hd{Sleep (h)} & \hd{Phys. (h)} & \hd{Top Variable Pairs (Ranked by $|r|$)} & \hd{Corr. ($r$)} \\
+\arrayrulecolor{accent!40}\midrule
+Low (0)      & 297 (14.8\%)   & 2.82 & 5.47 & 8.06 & 5.58 & Study -- Stress / Study -- CGPA & $0.74$ / $0.73$ \\
+\rowcolor{accent!5}
+Medium (1)   & 674 (33.7\%)   & 3.02 & 6.97 & 7.95 & 4.34 & CGPA -- Stress / Study -- Physical & $0.55$ / $-0.49$ \\
+High (2)     & 1,029 (51.5\%) & 3.26 & 8.39 & 7.05 & 3.96 & Sleep -- Physical / Physical -- CGPA & $-0.48$ / $-0.34$ \\
+\arrayrulecolor{accent}\midrule
+\rowcolor{accent!15}
+\textbf{All} & \textbf{2,000 (100\%)} & \textbf{3.12} & \textbf{7.48} & \textbf{7.50} & \textbf{4.33} & Social -- Physical / Sleep -- Stress & $-0.42$ / $-0.30$ \\
+\bottomrule[1.2pt]
+\end{tabularx}
+\end{table}
+
+% ---------------- TABLE 2 ----------------
+\begin{table}[!htbp]
+\centering
+\caption{\texttt{NumPy} Normal-Equation OLS Regression Results ($\hat{\beta} = (X^\top X)^{-1} X^\top y$; Sleep Omitted as Baseline)}
+\label{tab:ols}
+\scriptsize
+\renewcommand{\arraystretch}{1.08}
+\setlength{\tabcolsep}{5pt}
+\arrayrulecolor{accent!40}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X c !{\color{accent}\vrule width 0.8pt} >{\raggedright\arraybackslash}X c}
+\arrayrulecolor{accent}\toprule[1.2pt]
+\rowcolor{accent}
+\hd{Model Parameter (Design Matrix $X$, $2000 \times 5$)} & \hd{Coefficient ($\hat{\beta}$)} & \hd{Goodness-of-Fit Metric} & \hd{Value} \\
+\arrayrulecolor{accent!40}\midrule
+Intercept ($\hat{\beta}_0$, column of $1$s) & $1.8981$ & Mean CGPA ($\bar{y}$) & $3.1160$ \\
+\rowcolor{accent!5}
+Study Hours / Day (\texttt{Study\_Hours\_Per\_Day}) & $\mathbf{0.1589}$ & Total Sum of Squares ($\text{SST} = \sum (y - \bar{y})^2$) & $178.323$ \\
+Extracurricular Hours / Day (\texttt{Extracurricular\_Hours}) & $-0.0029$ & Sum of Squared Errors ($\text{SSE} = \sum (y - \hat{y})^2$) & $81.856$ \\
+\rowcolor{accent!5}
+Social Hours / Day (\texttt{Social\_Hours\_Per\_Day}) & $0.0059$ & Unexplained Fraction ($\text{SSE} / \text{SST}$) & $0.459$ \\
+Physical Activity Hours / Day (\texttt{Physical\_Activity}) & $0.0045$ & \cellcolor{hl}\textbf{Coefficient of Determination ($R^2 = 1 - \text{SSE}/\text{SST}$)} & \cellcolor{hl}$\mathbf{0.541}$ \\
+\arrayrulecolor{accent}\bottomrule[1.2pt]
+\end{tabularx}
+\end{table}
+
+% ---------------- TABLE 3 ----------------
+\begin{table}[!htbp]
+\centering
+\caption{CLT Verification on \texttt{Study\_Hours\_Per\_Day} ($5,000$ Replications per $n$; $\mu = 7.4758, \sigma = 1.4235$)}
+\label{tab:clt}
+\footnotesize
+\renewcommand{\arraystretch}{1.08}
+\setlength{\tabcolsep}{5pt}
+\arrayrulecolor{accent!40}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X c c c c c c}
+\arrayrulecolor{accent}\toprule[1.2pt]
+\rowcolor{accent}
+\hd{Metric} & \hd{$n = 1$} & \hd{$n = 2$} & \hd{$n = 5$} & \hd{$n = 10$} & \hd{$n = 30$} & \hd{$n = 100$} \\
+\arrayrulecolor{accent!40}\midrule
+Mean of Sample Means ($\bar{\bar{X}}_n$) & 7.4766 & 7.4637 & 7.4583 & 7.4798 & 7.4793 & 7.4763 \\
+\rowcolor{accent!5}
+Empirical SD of Sample Means & 1.4223 & 1.0017 & 0.6477 & 0.4554 & 0.2585 & 0.1437 \\
+\rowcolor{accent!5}
+Theoretical CLT SD ($\sigma/\sqrt{n}$) & 1.4235 & 1.0066 & 0.6366 & 0.4502 & 0.2599 & 0.1424 \\
+Skewness of Sample Means & $0.0323$ & $0.0383$ & $0.0769$ & $0.0047$ & $-0.0345$ & $0.0691$ \\
+\arrayrulecolor{accent}\bottomrule[1.2pt]
+\end{tabularx}
+\end{table}
+
+% ============================================================================
+% PAGE 4: SECTION 3 - FREQUENTLY ASKED QUESTIONS (STARTS ON A NEW PAGE)
+% ============================================================================
+\newpage
+\section{Frequently Answered Questions (FAQ)}
+
+\begin{enumerate}\setlength{\itemsep}{4pt}\setlength{\parskip}{1pt}\setlength{\topsep}{2pt}
+    \item \textbf{Which daily habit has the strongest effect on CGPA, and how much do the other activities add in the regression model?}\\
+    \textbf{Answer:} Study hours has by far the strongest relationship with CGPA, with a correlation of $r = 0.734$. On its own, study time explains about $53.9\%$ of the variation in grades ($r^2 = 0.734^2 \approx 0.539$). When we include Extracurricular, Social, and Physical Activity hours alongside Study hours in our \texttt{NumPy} regression model, $R^2$ only goes up to $0.541$ ($54.1\%$). This shows that once study hours are known, the other daily activities add almost nothing ($+0.2\%$) to predicting CGPA.
+
+    \item \textbf{How do daily study hours, sleep, and grades compare across the Low, Medium, and High stress groups?}\\
+    \textbf{Answer:} High-stress students ($51.5\%$ of the dataset) study the most at $8.39\text{ hours/day}$ and get the highest average CGPA ($3.26$), but they also sleep the least ($7.05\text{ hours/day}$) and spend the least time on physical activity ($3.96\text{ hours/day}$). Low-stress students ($14.8\%$) sleep more ($8.06\text{ hours/day}$) and exercise more ($5.58\text{ hours/day}$), but study only $5.47\text{ hours/day}$ and average a $2.82$ CGPA. Medium-stress students ($33.7\%$) sit in a healthy middle ground, averaging a $3.02$ CGPA with $6.97\text{ hours}$ of study and $7.95\text{ hours}$ of sleep.
+
+    \item \textbf{Why did we drop \texttt{Sleep\_Hours\_Per\_Day} when running our multiple linear regression in \texttt{NumPy}?}\\
+    \textbf{Answer:} For every student in the dataset, the five daily time columns add up to exactly $24\text{ hours}$. Because of this, you can always calculate a student's sleep hours by subtracting the other four activities from $24$. If we keep all five columns plus a column of ones for the intercept, the matrix $X^\top X$ cannot be inverted with \texttt{np.linalg.inv()}. Dropping \texttt{Sleep\_Hours\_Per\_Day} solves this problem and makes sleep the baseline activity that the other four coefficients are compared against.
+
+    \item \textbf{If Physical Activity has a negative correlation with CGPA ($r = -0.34$), does that mean exercising hurts a student's grades?}\\
+    \textbf{Answer:} No. That negative correlation happens because there are only $24\text{ hours}$ in a day: students who study $8\text{ to }10\text{ hours}$ a day naturally have less free time left for sports ($r = -0.49$ between study and physical activity). When we account for study hours in our regression model, the coefficient for physical activity becomes nearly zero ($\hat{\beta}_{\text{phys}} = +0.0045$), showing that exercise itself does not lower CGPA.
+
+    \item \textbf{What did the Central Limit Theorem (CLT) simulation on study hours show as the sample size increased?}\\
+    \textbf{Answer:} Even though raw study hours are spread almost flat between $5$ and $10\text{ hours}$ ($\mu = 7.4758$, $\sigma = 1.4235$), taking $5,000$ random samples at larger sample sizes ($n = 1, 2, 5, 10, 30, 100$) caused the sample averages to form a clean bell curve. By $n = 30$ and $n = 100$, the actual spread of sample means ($0.2585$ and $0.1437$) matched the theoretical formula $\sigma/\sqrt{n}$ ($0.2599$ and $0.1424$) to within $0.0014\text{ hours}$.
+\end{enumerate}
+
+% ============================================================================
+% PAGE 5: SECTION 4 - REFLECTION ESSAY (STARTS ON A NEW PAGE)
+% ============================================================================
+\newpage
+\section{Reflection Essay}
+
+\setlength{\parskip}{0.6em}
+
+When we first started this project, the hardest part was honestly just figuring out what direction to take. In regular lab assignments or homework, we are given a very specific question and we already know what the final answer is supposed to look like. With an open project, we just had a CSV file of $2,000$ students and complete freedom. At first, that felt a bit confusing because everyone in our group had a different idea of what to plot or test. Once we sat down and talked through it, though, that freedom actually became the best part of the project. We decided to start with basic exploration of the daily routines, check the Central Limit Theorem for fun on the study hours column, and then build a linear regression model from scratch in \texttt{NumPy} to see how daily time allocations actually affect CGPA.
+
+Working on this dataset also made us think differently than normal textbook problems. In class, we usually just calculate a correlation or fit a regression line and stop there. Here, when we saw that physical activity had a negative correlation with CGPA ($-0.34$) and that high-stress students had the highest average CGPA ($3.26$), it did not make much sense at first. It forced us to actually look at the numbers in the rows instead of blindly trusting a formula. Once we realized that all five daily activities in the dataset add up to $24$ hours, the pattern clicked: students studying $8$ to $10$ hours a day simply have less time left for sports or sleep ($r = -0.49$ between study and physical activity). Seeing the negative effect of physical activity completely disappear in our multiple regression model ($\hat{\beta}_{\text{phys}} = 0.0045$) once study hours was included taught us more about confounding variables and why correlation is not causation than any standard textbook exercise.
+
+On the technical side, implementing Ordinary Least Squares in \texttt{NumPy} using the normal equation $\hat{\beta} = (X^\top X)^{-1} X^\top y$ was a great learning experience. When we first tried including all five time columns with an intercept column of ones, we ran directly into the 24-hour collinearity problem: because the five columns always sum to $24$, the matrix $X^\top X$ cannot be inverted unless one time column is dropped. Dropping sleep as the baseline and computing $\text{SST} = 178.323$, $\text{SSE} = 81.856$, and $R^2 = 0.541$ step by step made the linear algebra from class feel real. Writing the Central Limit Theorem simulation with $5,000$ random samples was another highlight because we could watch a flat distribution of study hours turn into a clean bell curve as the sample size grew from $n=1$ to $n=100$.
+
+We also feel this kind of open-ended work is much closer to what we will face in internships and placements. In real projects, nobody gives you a step-by-step question sheet; you have to explore the data, check your assumptions, and figure out why $46\%$ of the variation in CGPA remains unexplained by daily hours alone (pointing to unmeasured factors like prior preparation, attendance, or course difficulty).
+
+Overall, this project took more time and coordination than a normal homework assignment, especially when merging everyone's code on GitHub and keeping the final report within five pages. Still, because the topic was about student routines, stress, and grades, we could all relate to it personally. If there is one takeaway we are keeping for ourselves this semester, it is right there in our group averages table: pushing study hours to $8.4$ hours a day by cutting sleep might raise CGPA slightly, but studying around $7$ hours a day and getting nearly $8$ hours of sleep like the Medium-stress group ($\text{CGPA} = 3.02$) is a much healthier way to get through college.
+
+\end{document}
